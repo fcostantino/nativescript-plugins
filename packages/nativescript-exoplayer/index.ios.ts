@@ -222,6 +222,13 @@ export class Video extends VideoBase {
 	}
 
 	public play() {
+		//PULL REQUEST https://github.com/nstudio/nativescript-videoplayer/pull/162/files
+		let audioSession = AVAudioSession.sharedInstance();
+		audioSession.setCategoryWithOptionsError(
+			AVAudioSessionCategoryAmbient,
+			AVAudioSessionCategoryOptions.DuckOthers
+		);
+		audioSession.setActiveError(true);
 		if (this._videoFinished) {
 			this._videoFinished = false;
 			this.seekToTime(0);
@@ -241,6 +248,9 @@ export class Video extends VideoBase {
 		if (this._playbackTimeObserverActive) {
 			this._removePlaybackTimeObserver();
 		}
+		//PULL REQUEST https://github.com/nstudio/nativescript-videoplayer/pull/162/files
+		let audioSession = AVAudioSession.sharedInstance();
+		setTimeout(() => audioSession.setActiveError(false), 100);
 	}
 
 	public mute(mute: boolean) {
